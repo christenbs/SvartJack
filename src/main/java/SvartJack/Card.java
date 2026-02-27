@@ -22,11 +22,12 @@ public class Card {
         return value;
     }
 
-    public void setValue(int value) {
-        this.value = value;
-    }
-
     public static void main(String[] args) {
         
+    }
+
+    @Override
+    public String toString() {
+        return  suit + "" + value;
     }
 }

@@ -1,6 +1,6 @@
 package SvartJack;
 
-public class Main {
+public class BlackJack {
     
     public static void main(String[] args) {
         
@@ -11,10 +11,9 @@ public class Main {
         deck.shuffle();
         
         System.out.println(deck);
+
+        deck.add_deck();
+        System.out.println(deck);
         System.out.println(deck.get_size());
-
-
-
-
     }
 }

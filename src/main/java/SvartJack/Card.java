@@ -22,10 +22,6 @@ public class Card {
         return value;
     }
 
-    public static void main(String[] args) {
-        
-    }
-
     @Override
     public String toString() {
         return  suit + "" + value;

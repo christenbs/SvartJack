@@ -2,8 +2,29 @@ package SvartJack;
 
 import java.util.ArrayList;
 
-public interface Hand {
+public class Hand {
 
-    public ArrayList<Card> getHand();
-    
+    private ArrayList<Card> hand;
+
+    public Hand() {
+        this.hand = new ArrayList<>();
+    }
+
+    public void add_card(Card card) {
+
+        validateCard(card);
+
+        this.hand.add(card);
+    }
+
+    public void validateCard(Card card) {
+        if (card == null) {
+            throw new IllegalArgumentException("Card can not be 'null'");
+        }
+    }
+
+    @Override
+    public String toString() {
+        return hand.toString();
+    }
 }

@@ -3,7 +3,6 @@ package SvartJack;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.stream.Collectors;
 
 public class CardDeck {
 
@@ -18,18 +17,25 @@ public class CardDeck {
                 this.deck.add(new Card(suit, value));
             }
         }
-    }
-
-    public ArrayList<Card> shiffle(ArrayList<Card> deck) {
-
-        this.deck.addAll(deck);
-
-        return this.deck;
+        Collections.shuffle(this.deck);
     }
 
     public void shuffle() {
 
         Collections.shuffle(this.deck);
+    }
+
+    public void add_deck() {
+
+        CardDeck new_deck = new CardDeck();
+        new_deck.shuffle();
+
+        this.deck.addAll(new_deck.getDeck());
+
+    }
+
+    public ArrayList<Card> getDeck() {
+        return this.deck;
     }
 
     public int get_size() {
@@ -38,6 +44,6 @@ public class CardDeck {
 
     @Override
     public String toString() {
-        return this.deck.stream().map(x -> x.toString()).collect(Collectors.toList()).toString();
+        return this.deck.toString();
     }
 }

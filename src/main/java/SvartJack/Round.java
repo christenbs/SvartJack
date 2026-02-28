@@ -4,22 +4,22 @@ import java.util.ArrayList;
 
 public class Round {
     
-    private Hand dealer;
-    private ArrayList<Hand> players = new ArrayList<>();
+    private Dealer dealer;
+    private ArrayList<Player> players = new ArrayList<>();
     private CardDeck deck = new CardDeck();
 
     public Round(int numberOfPlayers) {
 
         validateNumber_of_players(numberOfPlayers);
 
-        this.dealer = new Hand();
+        this.dealer = new Dealer();
         makePlayerHands(numberOfPlayers);
 
     }
 
     public void makePlayerHands(int numberOfPlayers) {
         for (int index = 0; index < numberOfPlayers; index++) {
-            this.players.add(new Hand());
+            this.players.add(new Player());
         }
     }
 
@@ -27,9 +27,9 @@ public class Round {
 
         for (int index = 0; index < 2; index++) {
 
-            this.players.forEach(c -> c.add_card((this.deck.getDeck().remove(0))));
+            this.players.forEach(c -> c.getHand().add_card((this.deck.getDeck().remove(0))));
 
-            dealer.add_card(this.deck.getDeck().remove(0));
+            dealer.getHand().add_card(this.deck.getDeck().remove(0));
         }
     }
 
@@ -38,10 +38,10 @@ public class Round {
     }
     
     public Hand getDealer() {
-        return dealer;
+        return dealer.getHand();
     }
     
-    public ArrayList<Hand> getPlayers() {
+    public ArrayList<Player> getPlayers() {
         return players;
     }
     
@@ -49,6 +49,15 @@ public class Round {
         return deck;
     }
 
+    public int getPlayerValue(int index) {
+        return players.get(index).getHandvalue();
+    }
+
+    public void newCard() {
+
+        this.players.forEach(c -> c.getHand().add_card((this.deck.getDeck().remove(0))));
+    }
+    
     public void validateNumber_of_players(int number) {
         if (number < 0) {
             throw new IllegalArgumentException("Can not have a negative player number");
@@ -58,6 +67,7 @@ public class Round {
         }
     }
 
+
     public static void main(String[] args) {
         Round round1 = new Round(4);
 
@@ -66,8 +76,14 @@ public class Round {
 
         System.out.println(round1.players);
         System.out.println(round1.dealer);
-
+        
         System.out.println(round1.getDeck().get_size());
-        System.out.println(round1.getDeck());
+        
+        round1.newCard();
+        System.out.println(round1.players);
+        System.out.println(round1.dealer);
+        System.out.println(round1.getDeck().get_size());
+        System.out.println(round1.getPlayerValue(0));
+
     }
 }

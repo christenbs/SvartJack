@@ -23,6 +23,10 @@ public class Hand {
         }
     }
 
+    public ArrayList<Card> getCards() {
+        return this.hand;
+    }
+
     @Override
     public String toString() {
         return hand.toString();

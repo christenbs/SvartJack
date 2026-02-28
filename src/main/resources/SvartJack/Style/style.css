@@ -1,0 +1,39 @@
+/* Bakgrunn */
+#background {
+    -fx-background-color: darkgreen;
+}
+
+/* Sentrer spiller-HBox */
+#players {
+    -fx-alignment: center; /* sentrerer alle spillere horisontalt */
+}
+
+/* Spillere */
+#player1, #player2, #player3, #player4, #player5 {
+    -fx-pref-width: 150;
+    -fx-pref-height: 150;
+    -fx-border-color: #800020; /* burgunder-rød */
+    -fx-border-width: 3;
+    -fx-background-color: rgba(255,255,255,0.1);
+}
+
+/* Dealer-boks */
+#dealer {
+    -fx-pref-width: 200;
+    -fx-pref-height: 150;
+    -fx-border-color: #800020; /* burgunder-rød */
+    -fx-border-width: 3;
+    -fx-background-color: rgba(255,255,255,0.1);
+}
+
+/* Labels i spillere og dealer */
+#player1 > .label,
+#player2 > .label,
+#player3 > .label,
+#player4 > .label,
+#player5 > .label,
+#dealer > .label {
+    -fx-font-size: 16px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}

@@ -5,23 +5,23 @@
 
 /* Sentrer spiller-HBox */
 #players {
-    -fx-alignment: center; /* sentrerer alle spillere horisontalt */
+    -fx-alignment: center;
 }
 
 /* Spillere */
 #player1, #player2, #player3, #player4, #player5 {
     -fx-pref-width: 150;
     -fx-pref-height: 150;
-    -fx-border-color: #800020; /* burgunder-rød */
+    -fx-border-color: #800020;
     -fx-border-width: 3;
     -fx-background-color: rgba(255,255,255,0.1);
 }
 
-/* Dealer-boks */
+/* Dealer */
 #dealer {
     -fx-pref-width: 200;
     -fx-pref-height: 150;
-    -fx-border-color: #800020; /* burgunder-rød */
+    -fx-border-color: #800020;
     -fx-border-width: 3;
     -fx-background-color: rgba(255,255,255,0.1);
 }
@@ -36,4 +36,21 @@
     -fx-font-size: 16px;
     -fx-text-fill: white;
     -fx-font-weight: bold;
+}
+
+/* Betting-sirkler */
+#betCircle1, #betCircle2, #betCircle3, #betCircle4, #betCircle5 {
+    -fx-fill: rgba(231, 211, 32, 0.5); /* halvtransparent hvit */
+    -fx-stroke: #800020; /* burgunder outline */
+    -fx-stroke-width: 2;
+}
+
+/* Knapper styling */
+#hitButton, #standButton, #splitButton {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-color: #800020; /* burgunder-rød */
+    -fx-text-fill: white;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
 }

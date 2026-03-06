@@ -4,10 +4,14 @@ public class Player implements ActorInterface{
     
     private String name;
     private Hand hand;
+    private int balance;
+    private int activeBet;
 
-    public Player() {
-        //this.name = name;
+    public Player(String name) {
+        this.name = name;
         this.hand = new Hand();
+        this.balance = 0;
+        this.activeBet = 0;
     }
 
     public Hand getHand() {
@@ -34,6 +38,26 @@ public class Player implements ActorInterface{
 
     public String getName() {
         return this.name;
+    }
+
+    public void deposit(int amount) {
+        this.balance += amount;
+    }
+
+    public void bet(int bet) {
+        this.activeBet += bet;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getBalance() {
+        return this.balance;
+    }
+
+    public int getActiveBet() {
+        return this.activeBet;
     }
 
     @Override

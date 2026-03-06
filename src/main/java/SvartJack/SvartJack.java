@@ -2,25 +2,22 @@ package SvartJack;
 
 import java.util.ArrayList;
 
-public class Round {
+public class SvartJack {
     
     private Dealer dealer;
     private ArrayList<Player> players = new ArrayList<>();
     private CardDeck deck = new CardDeck();
 
-    public Round(int numberOfPlayers) {
-
-        validateNumber_of_players(numberOfPlayers);
+    public SvartJack() {
 
         this.dealer = new Dealer();
-        makePlayerHands(numberOfPlayers);
-
     }
 
-    public void makePlayerHands(int numberOfPlayers) {
-        for (int index = 0; index < numberOfPlayers; index++) {
-            this.players.add(new Player());
-        }
+    public void add_player(String name) {
+
+        validateName(name);
+
+        this.players.add(new Player(name));
     }
 
     public void deal() {
@@ -54,22 +51,22 @@ public class Round {
     }
 
     public void newCard() {
-
         this.players.forEach(c -> c.getHand().add_card((this.deck.getDeck().remove(0))));
     }
-    
-    public void validateNumber_of_players(int number) {
-        if (number < 0) {
-            throw new IllegalArgumentException("Can not have a negative player number");
+
+    public void validateName(String name) {
+        if (name == null) {
+            throw new IllegalArgumentException("Name can not be 'null'");
         }
-        else if (number > 5) {
-            throw new IllegalArgumentException("Can not play with more than 5 players");
+        if (name.length() < 3) {
+            throw new IllegalArgumentException("Nme must be longer than 2 characters");
         }
     }
 
-
     public static void main(String[] args) {
-        Round round1 = new Round(4);
+        SvartJack round1 = new SvartJack();
+
+        round1.add_player("Christen");
 
         round1.deal();
         round1.add_deck();
@@ -84,6 +81,7 @@ public class Round {
         System.out.println(round1.dealer);
         System.out.println(round1.getDeck().get_size());
         System.out.println(round1.getPlayerValue(0));
+        System.out.println(round1.getDeck());
 
     }
 }

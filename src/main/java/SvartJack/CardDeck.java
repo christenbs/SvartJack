@@ -20,15 +20,9 @@ public class CardDeck {
         Collections.shuffle(this.deck);
     }
 
-    public void shuffle() {
-
-        Collections.shuffle(this.deck);
-    }
-
     public void add_deck() {
 
         CardDeck new_deck = new CardDeck();
-        new_deck.shuffle();
 
         this.deck.addAll(new_deck.getDeck());
 

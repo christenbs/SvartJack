@@ -10,8 +10,8 @@
 
 /* Spillere */
 #player1, #player2, #player3, #player4, #player5 {
-    -fx-pref-width: 150;
-    -fx-pref-height: 150;
+    -fx-pref-width: 220;
+    -fx-pref-height: 250;
     -fx-border-color: #800020;
     -fx-border-width: 3;
     -fx-background-color: rgba(255,255,255,0.1);
@@ -19,8 +19,8 @@
 
 /* Dealer */
 #dealer {
-    -fx-pref-width: 200;
-    -fx-pref-height: 150;
+    -fx-pref-width: 220;
+    -fx-pref-height: 250;
     -fx-border-color: #800020;
     -fx-border-width: 3;
     -fx-background-color: rgba(255,255,255,0.1);
@@ -40,17 +40,31 @@
 
 /* Betting-sirkler */
 #betCircle1, #betCircle2, #betCircle3, #betCircle4, #betCircle5 {
-    -fx-fill: rgba(231, 211, 32, 0.5); /* halvtransparent hvit */
-    -fx-stroke: #800020; /* burgunder outline */
+    -fx-fill: rgba(243, 215, 31, 0.768);
+    -fx-stroke: #800020; 
     -fx-stroke-width: 2;
+    -fx-translate-y: -45;
+    -fx-translate-x: 105;
 }
 
 /* Knapper styling */
-#hitButton, #standButton, #splitButton {
+#hitButton, #standButton, #splitButton, #addPlayerButton, #depositButton {
     -fx-font-size: 14px;
     -fx-font-weight: bold;
-    -fx-background-color: #800020; /* burgunder-rød */
+    -fx-background-color: #800020; 
     -fx-text-fill: white;
     -fx-border-radius: 5;
     -fx-background-radius: 5;
+}
+
+#addPlayerBox {
+    -fx-translate-y: 50;
+    -fx-translate-x: 1200;
+     -fx-stroke: #800020; 
+}
+
+#depositBox {
+    -fx-translate-y: 200;
+    -fx-translate-x: 1200;
+    -fx-stroke: #800020; 
 }

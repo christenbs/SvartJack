@@ -48,7 +48,7 @@
 }
 
 /* Knapper styling */
-#hitButton, #standButton, #splitButton, #addPlayerButton, #depositButton {
+#hitButton, #standButton, #splitButton, #addPlayerButton2, #depositButton1, #addPlayerButton1, #depositButton2 {
     -fx-font-size: 14px;
     -fx-font-weight: bold;
     -fx-background-color: #800020; 

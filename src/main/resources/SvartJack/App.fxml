@@ -23,18 +23,22 @@
     </Pane>
 
     
+<!--Add player-->
     <VBox fx:id="addPlayerBox" spacing="10" alignment="CENTER">
 
-        <TextField fx:id="addPlayerTextField" promptText="PlayerName"/>
-        <Button fx:id="addPlayerButton" text="Add player" onAction="#addPlayer"/>
+        <Button fx:id="addPlayerButton1" text="Add player" onAction="#addPlayer1"/>
+        <TextField fx:id="addPlayerTextField" promptText="Player name"/>
+        <Button fx:id="addPlayerButton2" text="Add player" onAction="#addPlayer"/>
 
     </VBox>
 
+<!--Deposit-->
     <VBox fx:id="depositBox" spacing="10" alignment="CENTER">
 
+        <Button fx:id="depositButton1" text="Deposit" onAction="#deposit1"/>
         <TextField fx:id="depositNameTextField" promptText="Name"/>
         <TextField fx:id="depositAmountTextField" promptText="Amount"/>
-        <Button fx:id="depositButton" text="Deposit" onAction="#deposit"/>
+        <Button fx:id="depositButton2" text="Deposit" onAction="#deposit"/>
 
     </VBox>
 

@@ -43,18 +43,25 @@
     -fx-fill: rgba(243, 215, 31, 0.768);
     -fx-stroke: #800020; 
     -fx-stroke-width: 2;
-    -fx-translate-y: -45;
-    -fx-translate-x: 105;
+    -fx-translate-y: -145;
 }
 
 /* Knapper styling */
-#hitButton, #standButton, #splitButton, #addPlayerButton2, #depositButton1, #addPlayerButton1, #depositButton2 {
+#hitButton, #standButton, #splitButton, #addPlayerButton2, #depositButton1, #addPlayerButton1, #depositButton2, #placeBetsButton, #betButton {
     -fx-font-size: 14px;
     -fx-font-weight: bold;
     -fx-background-color: #800020; 
     -fx-text-fill: white;
     -fx-border-radius: 5;
     -fx-background-radius: 5;
+}
+
+#addPlayerButton2, #addPlayerTextField {
+    -fx-translate-y: -38;
+}
+
+#depositButton2, #depositNameTextField, #depositAmountTextField {
+    -fx-translate-y: -38;
 }
 
 #addPlayerBox {
@@ -67,4 +74,36 @@
     -fx-translate-y: 200;
     -fx-translate-x: 1200;
     -fx-stroke: #800020; 
+}
+
+#placeBetsButton {
+    -fx-translate-y: 250;
+    -fx-font-size: 25px;
+}
+
+#betButton {
+    -fx-pref-width: 50;
+    -fx-translate-y: 320;
+}
+
+#betAmountTextField {
+    -fx-maxWidth: 50;
+    -fx-translate-y: 290;
+}
+
+#player1ActiveBet, #player2ActiveBet, #player3ActiveBet, #player4ActiveBet, #player5ActiveBet {
+    -fx-translate-y: -145;
+    -fx-font-size: 17px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+#player1Label, #player2Label, #player3Label, #player4Label, #player5Label, #dealerLabel {
+    -fx-translate-x: 5;
+    -fx-translate-y: 5;
+}
+
+#player1Balance, #player2Balance, #player3Balance, #player4Balance, #player5Balance {
+    -fx-translate-x: 5;
+    -fx-translate-y: 3;
 }

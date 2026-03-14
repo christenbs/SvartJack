@@ -24,7 +24,11 @@ public class SvartJack {
 
         for (int index = 0; index < 2; index++) {
 
-            this.players.forEach(c -> c.getHand().add_card((this.deck.getDeck().remove(0))));
+            this.players.forEach(c -> {
+                if (c.getActiveBet() > 0) {
+                    c.getHand().add_card((this.deck.getDeck().remove(0)));
+                }
+            });
 
             dealer.getHand().add_card(this.deck.getDeck().remove(0));
         }

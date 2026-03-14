@@ -9,6 +9,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.geometry.Insets?>
 
 <AnchorPane fx:id="background" prefHeight="900.0" prefWidth="1440.0"
             xmlns="http://javafx.com/javafx/8.0.171"
@@ -16,19 +17,23 @@
             fx:controller="SvartJack.SvartJackController">
 
 <!--Dealer-->
-    <Pane fx:id="dealer" prefWidth="200" prefHeight="150" layoutX="620" layoutY="50">
+    <VBox fx:id="dealer" prefWidth="200" prefHeight="150" layoutX="620" layoutY="50">
         <children>
-            <Label text="Dealer" layoutX="10" layoutY="10"/>
+            <Label fx:id="dealerLabel" text="Dealer" layoutX="10" layoutY="10"/>
         </children>
-    </Pane>
+        <StackPane>
+            <Button fx:id="placeBetsButton" text="Place bets" onAction="#placeBets"/>
+            <Button fx:id="betButton" text="Bet" onAction="#bet"/>
+            <TextField fx:id="betAmountTextField" promptText=""/>
+        </StackPane>
+    </VBox>
 
-    
 <!--Add player-->
     <VBox fx:id="addPlayerBox" spacing="10" alignment="CENTER">
 
         <Button fx:id="addPlayerButton1" text="Add player" onAction="#addPlayer1"/>
-        <TextField fx:id="addPlayerTextField" promptText="Player name"/>
         <Button fx:id="addPlayerButton2" text="Add player" onAction="#addPlayer"/>
+        <TextField fx:id="addPlayerTextField" promptText="Player name"/>
 
     </VBox>
 
@@ -36,60 +41,63 @@
     <VBox fx:id="depositBox" spacing="10" alignment="CENTER">
 
         <Button fx:id="depositButton1" text="Deposit" onAction="#deposit1"/>
+        <Button fx:id="depositButton2" text="Deposit" onAction="#deposit"/>
         <TextField fx:id="depositNameTextField" promptText="Name"/>
         <TextField fx:id="depositAmountTextField" promptText="Amount"/>
-        <Button fx:id="depositButton2" text="Deposit" onAction="#deposit"/>
 
     </VBox>
 
 <!--Spillere-->
     <HBox fx:id="players" spacing="50" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" layoutY="600">
-        <children>
-            <Pane fx:id="player1">
-                <children>
-                    <Label fx:id="player1Label" text="" layoutX="10" layoutY="10"/>
-                    <Label fx:id="player1Balance" text="" layoutX="10" layoutY="30"/>
+
+            <VBox fx:id="player1" spacing="5" alignment="TOP_LEFT">
+                <Label fx:id="player1Label" text=""/>
+                <Label fx:id="player1Balance" text=""/>
+                <StackPane>
                     <Circle fx:id="betCircle1" radius="40"/>
-                </children>
-            </Pane>
+                    <Label fx:id="player1ActiveBet" text="" StackPane.alignment="CENTER"/>
+                </StackPane>
+            </VBox>
 
-            <Pane fx:id="player2">
-                <children>
-                    <Label fx:id="player2Label" text="" layoutX="10" layoutY="10"/>
-                    <Label fx:id="player2Balance" text="" layoutX="10" layoutY="30"/>
+            <VBox fx:id="player2" spacing="5" alignment="TOP_LEFT">
+                <Label fx:id="player2Label" text=""/>
+                <Label fx:id="player2Balance" text=""/>
+                <StackPane>
                     <Circle fx:id="betCircle2" radius="40"/>
-                </children>
-            </Pane>
+                    <Label fx:id="player2ActiveBet" text="" StackPane.alignment="CENTER"/>
+                </StackPane>
+            </VBox>
 
-            <Pane fx:id="player3">
-                <children>
-                    <Label fx:id="player3Label" text="" layoutX="10" layoutY="10"/>
-                    <Label fx:id="player3Balance" text="" layoutX="10" layoutY="30"/>
+            <VBox fx:id="player3" spacing="5" alignment="TOP_LEFT">
+                <Label fx:id="player3Label" text=""/>
+                <Label fx:id="player3Balance" text=""/>
+                <StackPane>
                     <Circle fx:id="betCircle3" radius="40"/>
-                </children>
-            </Pane>
+                    <Label fx:id="player3ActiveBet" text="" StackPane.alignment="CENTER"/>
+                </StackPane>
+            </VBox>
 
-            <Pane fx:id="player4">
-                <children>
-                    <Label fx:id="player4Label" text="" layoutX="10" layoutY="10"/>
-                    <Label fx:id="player4Balance" text="" layoutX="10" layoutY="30"/>
+            <VBox fx:id="player4" spacing="5" alignment="TOP_LEFT">
+                <Label fx:id="player4Label" text=""/>
+                <Label fx:id="player4Balance" text=""/>
+                <StackPane>
                     <Circle fx:id="betCircle4" radius="40"/>
-                </children>
-            </Pane>
+                    <Label fx:id="player4ActiveBet" text="" StackPane.alignment="CENTER"/>
+                </StackPane>
+            </VBox>
 
-            <Pane fx:id="player5">
-                <children>
-                    <Label fx:id="player5Label" text="" layoutX="10" layoutY="10"/>
-                    <Label fx:id="player5Balance" text="" layoutX="10" layoutY="30"/>
+            <VBox fx:id="player5" spacing="5" alignment="TOP_LEFT">
+                <Label fx:id="player5Label" text=""/>
+                <Label fx:id="player5Balance" text=""/>
+                <StackPane>
                     <Circle fx:id="betCircle5" radius="40"/>
-                </children>
-            </Pane>
-        </children>
+                    <Label fx:id="player5ActiveBet" text="" StackPane.alignment="CENTER"/>
+                </StackPane>
+            </VBox>
     </HBox>
 
     <!-- Knapper -->
     <Button fx:id="hitButton" text="Hit" layoutX="50" layoutY="300" prefWidth="80" prefHeight="40"/>
     <Button fx:id="standButton" text="Stand" layoutX="50" layoutY="360" prefWidth="80" prefHeight="40"/>
     <Button fx:id="splitButton" text="Split" layoutX="50" layoutY="420" prefWidth="80" prefHeight="40"/>
-
 </AnchorPane>

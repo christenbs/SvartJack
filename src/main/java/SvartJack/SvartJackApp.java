@@ -26,6 +26,6 @@ public class SvartJackApp extends Application {
         scene.getStylesheets().add(getClass().getResource("/SvartJack/style/style.css").toExternalForm());
 
         primaryStage.setScene(scene);
-        primaryStage.show();
+        primaryStage.show(); 
     }
 }

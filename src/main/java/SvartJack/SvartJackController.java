@@ -1,6 +1,7 @@
 package SvartJack;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Optional;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -22,11 +23,19 @@ public class SvartJackController {
     private Button depositButton1;
     @FXML
     private Button depositButton2;
+    @FXML
+    private Button placeBetsButton;
+    @FXML
+
+    private Button betButton;
 
     @FXML
     private TextField depositNameTextField;
     @FXML
     private TextField depositAmountTextField;
+
+    @FXML
+    private TextField betAmountTextField;
 
     /*Sette navn på spillere */
     @FXML
@@ -55,31 +64,59 @@ public class SvartJackController {
     @FXML
     private Label player5Balance;
     
-    private ArrayList<Label> balances;
+    private ArrayList<Label> balanceLabels;
     private int setBalanceIndex = 0;  
 
-    /* Deposits */
+    /*Sette bets */
+    @FXML
+    private Label player1ActiveBet;
+    @FXML
+    private Label player2ActiveBet;
+    @FXML
+    private Label player3ActiveBet;
+    @FXML
+    private Label player4ActiveBet;
+    @FXML
+    private Label player5ActiveBet;
+    
+    private ArrayList<Label> betLabels;
+    private int betLabelIndex;  
     
     @FXML
     public void initialize() {
-        labels = new ArrayList<>(Arrays.asList(player1Label, player2Label, player3Label, player4Label, player5Label));
-        balances = new ArrayList<>(Arrays.asList(player1Balance, player2Balance, player3Balance, player4Balance, player5Balance));
+        this.labels = new ArrayList<>(Arrays.asList(player1Label, player2Label, player3Label, player4Label, player5Label));
+        this.balanceLabels = new ArrayList<>(Arrays.asList(player1Balance, player2Balance, player3Balance, player4Balance, player5Balance));
+        this.betLabels = new ArrayList<>(Arrays.asList(player1ActiveBet, player2ActiveBet, player3ActiveBet, player4ActiveBet, player5ActiveBet));
 
-        addPlayerButton2.setOpacity(0.0);
-        addPlayerTextField.setOpacity(0.0);
+        addPlayerButton2.setVisible(false);
+        addPlayerButton2.setDisable(true);
+        addPlayerTextField.setVisible(false);
+        addPlayerTextField.setDisable(true);
 
-        depositButton1.setOpacity(0.0);
-        depositButton2.setOpacity(0.0);
-        depositNameTextField.setOpacity(0.0);
-        depositAmountTextField.setOpacity(0.0);
+        depositButton1.setVisible(false);
+        depositButton1.setDisable(true);
+        depositButton2.setVisible(false);
+        depositButton2.setDisable(true);
+        depositNameTextField.setVisible(false);
+        depositNameTextField.setDisable(true);
+        depositAmountTextField.setVisible(false);
+        depositAmountTextField.setDisable(true);
+        
+        betButton.setVisible(false);
+        betButton.setDisable(true);
+        betAmountTextField.setVisible(false);
+        betAmountTextField.setDisable(true);
     }
 
     /*Funkjsonalitet */
     @FXML
     public void addPlayer1() {
-        addPlayerButton1.setOpacity(0.0);
-        addPlayerButton2.setOpacity(100.0);
-        addPlayerTextField.setOpacity(100.0);
+        addPlayerButton1.setVisible(false);
+        addPlayerButton1.setDisable(true);
+        addPlayerButton2.setVisible(true);
+        addPlayerButton2.setDisable(false);
+        addPlayerTextField.setVisible(true);
+        addPlayerTextField.setDisable(false);
     }
 
     @FXML
@@ -98,59 +135,146 @@ public class SvartJackController {
         else {
 
             if (svartJack.getPlayers().size() == 0) {
-                depositButton1.setOpacity(100);
+                depositButton1.setVisible(true);
+                depositButton1.setDisable(false);
             }
 
             svartJack.add_player(name);
             addPlayerTextField.clear();
             
             labels.get(newPlayerIndex).setText(name);
-            balances.get(setBalanceIndex).setText(Integer.toString(svartJack.getPlayers().getLast().getBalance()));
+            balanceLabels.get(setBalanceIndex).setText(Integer.toString(svartJack.getPlayers().getLast().getBalance()));
             newPlayerIndex++;
             setBalanceIndex++;
     
             addPlayerTextField.setPromptText("Player name");
-            addPlayerTextField.setOpacity(0.0);
-            addPlayerButton2.setOpacity(0.0);
-            addPlayerButton1.setOpacity(100.0);
+            addPlayerTextField.setVisible(false);
+            addPlayerTextField.setDisable(true);
+            addPlayerButton2.setVisible(false);
+            addPlayerButton2.setDisable(true);
+            addPlayerButton1.setVisible(true);
+            addPlayerButton1.setDisable(false);
         }
     }
 
     @FXML
     public void deposit1() {
-        depositButton1.setOpacity(0.0);
-        depositButton2.setOpacity(100.0);
-        depositNameTextField.setOpacity(100.0);
-        depositAmountTextField.setOpacity(100.0);
+        depositButton1.setVisible(false);
+        depositButton1.setDisable(true);
+        depositButton2.setVisible(true);
+        depositButton2.setDisable(false);
+        depositNameTextField.setVisible(true);
+        depositNameTextField.setDisable(false);
+        depositAmountTextField.setVisible(true);
+        depositAmountTextField.setDisable(false);
     }
 
     @FXML
     public void deposit() {
-        int amount = Integer.valueOf(depositAmountTextField.getText());
+        int amount;
         String name = depositNameTextField.getText();
 
-        if (svartJack.getPlayers().stream().noneMatch(c -> c.getName().equals(name))) {
+        try {
+            amount = Integer.parseInt(depositAmountTextField.getText());
+        } catch (NumberFormatException e) {
+            depositAmountTextField.setPromptText("Enter a number");
+            depositAmountTextField.clear();
+            return;
+        }
+
+        Optional<Player> playerOpt = svartJack.getPlayers().stream()
+                .filter(p -> p.getName().equals(name))
+                .findFirst();
+
+        if (playerOpt.isPresent()) {
+            Player player = playerOpt.get();
+            player.deposit(amount);
+
+            int index = svartJack.getPlayers().indexOf(player);
+            balanceLabels.get(index).setText(Integer.toString(player.getBalance()));
+
+            depositButton1.setVisible(true);
+            depositButton1.setDisable(false);
+            depositButton2.setVisible(false);
+            depositButton2.setDisable(true);
+            depositNameTextField.setVisible(false);
+            depositNameTextField.setDisable(true);
+            depositAmountTextField.setVisible(false);
+            depositAmountTextField.setDisable(true);
+
+            depositNameTextField.setPromptText("Player name");
+        } else {
             depositNameTextField.setPromptText("Can not find: " + name);
         }
-        else {
-            svartJack.getPlayers().stream()
-            .forEach(c -> {
-                if (c.getName().equals(name)) {
-                    c.deposit(amount);
-                    int oldIndex = setBalanceIndex;
-                    int setBalanceIndex = svartJack.getPlayers().indexOf(c);
-                    balances.get(setBalanceIndex).setText(Integer.toString(svartJack.getPlayers().getLast().getBalance()));
-                    setBalanceIndex = oldIndex;
-    
-                    depositButton1.setOpacity(100.0);
-                    depositButton2.setOpacity(0.0);
-                    depositNameTextField.setOpacity(0.0);
-                    depositAmountTextField.setOpacity(0.0);
-                    depositNameTextField.setPromptText("Player name");
-                }
-            });
-        }
+
         depositNameTextField.clear();
         depositAmountTextField.clear();
+    }
+    @FXML
+    public void placeBets() {
+        if (svartJack.getPlayers().size() > 0) {
+            placeBetsButton.setVisible(false);
+            placeBetsButton.setDisable(true);
+            betAmountTextField.setVisible(true);
+            betAmountTextField.setDisable(false);
+            betButton.setVisible(true);
+            betButton.setDisable(false);
+    
+            betLabelIndex = 0;
+            nextPlayerBet();
+    
+            betAmountTextField.setPromptText(svartJack.getPlayers().get(betLabelIndex).getName() + " bet amount");  
+        }
+        else {
+            return;
+        }
+    }
+
+    public void nextPlayerBet() {
+        if (betLabelIndex < svartJack.getPlayers().size()) {
+            Player player = svartJack.getPlayers().get(betLabelIndex);
+
+            betAmountTextField.clear();
+            betAmountTextField.setPromptText(player.getName() + " bet amount");
+        }
+        else {
+            betAmountTextField.setVisible(false);
+            betAmountTextField.setDisable(true);
+            betButton.setVisible(false);
+            betButton.setDisable(true);
+            startDealing();
+        }
+    }
+
+    @FXML
+    public void bet() {
+        int amount = Integer.valueOf(betAmountTextField.getText());
+        Player player = svartJack.getPlayers().get(betLabelIndex);
+
+        if (amount <= player.getBalance()) {
+            System.out.println(player.getName() + " satset " + amount);
+    
+            Label betLabel = betLabels.get(betLabelIndex);
+            betLabel.setText(String.valueOf(amount));
+            player.bet(amount);
+
+            balanceLabels.get(betLabelIndex).setText(String.valueOf(player.getBalance()));
+
+            betLabelIndex++;
+            nextPlayerBet(); 
+        }
+        else {
+            betAmountTextField.setPromptText("Bet was bigger than your balance");
+            betAmountTextField.clear();;
+        }
+    }
+
+    @FXML
+    public void startDealing() {
+        svartJack.deal();
+        System.out.println(svartJack.getDealer().getCards());
+        svartJack.getPlayers().stream().forEach(c -> {
+            System.out.println(c.getHand());
+        });
     }
 }

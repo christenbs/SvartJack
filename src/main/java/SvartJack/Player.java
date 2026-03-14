@@ -46,6 +46,7 @@ public class Player implements ActorInterface{
 
     public void bet(int bet) {
         this.activeBet += bet;
+        this.balance -= bet;
     }
 
     public void setName(String name) {

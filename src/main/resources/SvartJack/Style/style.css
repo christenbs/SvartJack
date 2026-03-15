@@ -98,6 +98,20 @@
     -fx-font-weight: bold;
 }
 
+#player1Score, #player2Score, #player3Score, #player4Score, #player5Score {
+    -fx-translate-y: 140;
+    -fx-font-size: 17px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+#dealerScore {
+    -fx-translate-y: 180;
+    -fx-font-size: 17px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
 #player1Label, #player2Label, #player3Label, #player4Label, #player5Label, #dealerLabel {
     -fx-translate-x: 5;
     -fx-translate-y: 5;

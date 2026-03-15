@@ -38,8 +38,8 @@ public class SvartJack {
         this.deck.add_deck();
     }
     
-    public Hand getDealer() {
-        return dealer.getHand();
+    public Dealer getDealer() {
+        return this.dealer;
     }
     
     public ArrayList<Player> getPlayers() {

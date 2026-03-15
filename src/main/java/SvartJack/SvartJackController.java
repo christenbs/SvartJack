@@ -25,8 +25,8 @@ public class SvartJackController {
     private Button depositButton2;
     @FXML
     private Button placeBetsButton;
+    
     @FXML
-
     private Button betButton;
 
     @FXML
@@ -82,11 +82,29 @@ public class SvartJackController {
     private ArrayList<Label> betLabels;
     private int betLabelIndex;  
     
+    /* Scores */
+    
+    @FXML
+    private Label player1Score;
+    @FXML
+    private Label player2Score;
+    @FXML
+    private Label player3Score;
+    @FXML
+    private Label player4Score;
+    @FXML
+    private Label player5Score;
+    @FXML
+    private Label dealerScore;
+    
+    private ArrayList<Label> scoreLabels;
+    
     @FXML
     public void initialize() {
         this.labels = new ArrayList<>(Arrays.asList(player1Label, player2Label, player3Label, player4Label, player5Label));
         this.balanceLabels = new ArrayList<>(Arrays.asList(player1Balance, player2Balance, player3Balance, player4Balance, player5Balance));
         this.betLabels = new ArrayList<>(Arrays.asList(player1ActiveBet, player2ActiveBet, player3ActiveBet, player4ActiveBet, player5ActiveBet));
+        this.scoreLabels = new ArrayList<>(Arrays.asList(player1Score, player2Score, player3Score, player4Score, player5Score));
 
         addPlayerButton2.setVisible(false);
         addPlayerButton2.setDisable(true);
@@ -272,9 +290,20 @@ public class SvartJackController {
     @FXML
     public void startDealing() {
         svartJack.deal();
-        System.out.println(svartJack.getDealer().getCards());
+
+        System.out.println(svartJack.getDealer().getHand());
+
         svartJack.getPlayers().stream().forEach(c -> {
             System.out.println(c.getHand());
         });
+
+        svartJack.getPlayers().forEach(c -> {
+            if (c.getHandvalue() > 0) {
+                int index = svartJack.getPlayers().indexOf(c);
+                scoreLabels.get(index).setText(String.valueOf(c.getHandvalue()));
+            }
+        });
+
+        dealerScore.setText(String.valueOf(svartJack.getDealer().getHandvalue()));
     }
 }

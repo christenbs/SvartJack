@@ -22,6 +22,7 @@
             <Label fx:id="dealerLabel" text="Dealer" layoutX="10" layoutY="10"/>
         </children>
         <StackPane>
+            <Label fx:id="dealerScore" text="" StackPane.alignment="CENTER"/>
             <Button fx:id="placeBetsButton" text="Place bets" onAction="#placeBets"/>
             <Button fx:id="betButton" text="Bet" onAction="#bet"/>
             <TextField fx:id="betAmountTextField" promptText=""/>
@@ -56,6 +57,7 @@
                 <StackPane>
                     <Circle fx:id="betCircle1" radius="40"/>
                     <Label fx:id="player1ActiveBet" text="" StackPane.alignment="CENTER"/>
+                    <Label fx:id="player1Score" text="" StackPane.alignment="CENTER"/>
                 </StackPane>
             </VBox>
 
@@ -65,6 +67,7 @@
                 <StackPane>
                     <Circle fx:id="betCircle2" radius="40"/>
                     <Label fx:id="player2ActiveBet" text="" StackPane.alignment="CENTER"/>
+                    <Label fx:id="player2Score" text="" StackPane.alignment="CENTER"/>
                 </StackPane>
             </VBox>
 
@@ -74,6 +77,7 @@
                 <StackPane>
                     <Circle fx:id="betCircle3" radius="40"/>
                     <Label fx:id="player3ActiveBet" text="" StackPane.alignment="CENTER"/>
+                    <Label fx:id="player3Score" text="" StackPane.alignment="CENTER"/>
                 </StackPane>
             </VBox>
 
@@ -83,6 +87,7 @@
                 <StackPane>
                     <Circle fx:id="betCircle4" radius="40"/>
                     <Label fx:id="player4ActiveBet" text="" StackPane.alignment="CENTER"/>
+                    <Label fx:id="player4Score" text="" StackPane.alignment="CENTER"/>
                 </StackPane>
             </VBox>
 
@@ -92,6 +97,7 @@
                 <StackPane>
                     <Circle fx:id="betCircle5" radius="40"/>
                     <Label fx:id="player5ActiveBet" text="" StackPane.alignment="CENTER"/>
+                    <Label fx:id="player5Score" text="" StackPane.alignment="CENTER"/>
                 </StackPane>
             </VBox>
     </HBox>

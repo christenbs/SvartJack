@@ -21,7 +21,14 @@ public class Player implements ActorInterface{
     public int getHandvalue() {
         return this.hand.getCards()
         .stream()
-        .mapToInt(c -> c.getValue())
+        .mapToInt(c -> {
+            if (c.getValue() > 10) {
+                return 10;
+            }
+            else {
+                return c.getValue();
+            }
+        })
         .sum();
     }
 

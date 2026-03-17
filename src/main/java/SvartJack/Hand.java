@@ -27,6 +27,26 @@ public class Hand {
         return this.hand;
     }
 
+    public int getAceCount() {
+        int acesCount = this.hand
+        .stream()
+        .mapToInt(c -> {
+            if (c.getValue() == 1) {
+                return 1;
+            }
+            else {
+                return 0;
+            }
+        })
+        .sum();
+
+        return acesCount;
+    }
+
+    public void clearHand() {
+        this.hand.clear();
+    }
+
     @Override
     public String toString() {
         return hand.toString();

@@ -6,5 +6,7 @@ public interface ActorInterface {
     public int getHandvalue();
     public void hit(Card card);
     public boolean isBust();
+    public boolean hasBlackjack();
+    public void clearHand();
     
 }

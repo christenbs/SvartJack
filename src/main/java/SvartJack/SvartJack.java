@@ -54,8 +54,14 @@ public class SvartJack {
         return players.get(index).getHandvalue();
     }
 
-    public void newCard() {
-        this.players.forEach(c -> c.getHand().add_card((this.deck.getDeck().remove(0))));
+    public void hit(Player player) {
+        player.hit(this.deck.getDeck().remove(0));
+
+        //this.players.forEach(c -> c.getHand().add_card((this.deck.getDeck().remove(0))));
+    }
+
+    public void hit(Dealer dealer) {
+        dealer.hit(this.deck.getDeck().remove(0));
     }
 
     public void validateName(String name) {
@@ -80,7 +86,6 @@ public class SvartJack {
         
         System.out.println(round1.getDeck().get_size());
         
-        round1.newCard();
         System.out.println(round1.players);
         System.out.println(round1.dealer);
         System.out.println(round1.getDeck().get_size());

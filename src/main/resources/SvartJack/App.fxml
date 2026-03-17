@@ -9,7 +9,11 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.Polygon?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 
 <AnchorPane fx:id="background" prefHeight="900.0" prefWidth="1440.0"
             xmlns="http://javafx.com/javafx/8.0.171"
@@ -24,6 +28,7 @@
         <StackPane>
             <Label fx:id="dealerScore" text="" StackPane.alignment="CENTER"/>
             <Button fx:id="placeBetsButton" text="Place bets" onAction="#placeBets"/>
+            <Button fx:id="resetButton" text="Reset table" onAction="#reset"/>
             <Button fx:id="betButton" text="Bet" onAction="#bet"/>
             <TextField fx:id="betAmountTextField" promptText=""/>
         </StackPane>
@@ -102,8 +107,17 @@
             </VBox>
     </HBox>
 
-    <!-- Knapper -->
-    <Button fx:id="hitButton" text="Hit" layoutX="50" layoutY="300" prefWidth="80" prefHeight="40"/>
-    <Button fx:id="standButton" text="Stand" layoutX="50" layoutY="360" prefWidth="80" prefHeight="40"/>
-    <Button fx:id="splitButton" text="Split" layoutX="50" layoutY="420" prefWidth="80" prefHeight="40"/>
+    <!-- Action buttons -->
+    <VBox fx:id="actionButtonsVBox" spacing="10">
+        <Button fx:id="hitButton" text="Hit" layoutX="50" layoutY="300" prefWidth="80" prefHeight="40" onAction="#hit"/>
+        <Button fx:id="standButton" text="Stand" layoutX="50" layoutY="360" prefWidth="80" prefHeight="40" onAction="#stand"/>
+        <Button fx:id="splitButton" text="Split" layoutX="50" layoutY="420" prefWidth="80" prefHeight="40" onAction="#split"/>
+    </VBox>
+
+    <ImageView fx:id="dealerPointer" layoutX="130" layoutY="400" fitWidth="100" fitHeight="100" rotate="180">
+        <image>
+            <Image url="@images/dealerPointer.png"/>
+        </image>
+    </ImageView>    
+
 </AnchorPane>

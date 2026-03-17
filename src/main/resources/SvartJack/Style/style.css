@@ -47,7 +47,7 @@
 }
 
 /* Knapper styling */
-#hitButton, #standButton, #splitButton, #addPlayerButton2, #depositButton1, #addPlayerButton1, #depositButton2, #placeBetsButton, #betButton {
+#hitButton, #standButton, #splitButton, #addPlayerButton2, #depositButton1, #addPlayerButton1, #depositButton2, #placeBetsButton, #betButton, #resetButton {
     -fx-font-size: 14px;
     -fx-font-weight: bold;
     -fx-background-color: #800020; 
@@ -76,7 +76,7 @@
     -fx-stroke: #800020; 
 }
 
-#placeBetsButton {
+#placeBetsButton, #resetButton {
     -fx-translate-y: 250;
     -fx-font-size: 25px;
 }
@@ -120,4 +120,10 @@
 #player1Balance, #player2Balance, #player3Balance, #player4Balance, #player5Balance {
     -fx-translate-x: 5;
     -fx-translate-y: 3;
+}
+
+#actionButtonsVBox {
+    -fx-translate-x: 15;
+    -fx-translate-y: 420;
+
 }

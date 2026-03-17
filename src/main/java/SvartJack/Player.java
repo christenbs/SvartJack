@@ -6,6 +6,7 @@ public class Player implements ActorInterface{
     private Hand hand;
     private int balance;
     private int activeBet;
+    private boolean isBust = false;
 
     public Player(String name) {
         this.name = name;
@@ -19,17 +20,30 @@ public class Player implements ActorInterface{
     }
 
     public int getHandvalue() {
-        return this.hand.getCards()
+
+        int value =  this.hand.getCards()
         .stream()
         .mapToInt(c -> {
             if (c.getValue() > 10) {
                 return 10;
+            }
+            else if (c.getValue() == 1) {
+                return 11;
             }
             else {
                 return c.getValue();
             }
         })
         .sum();
+
+        int aceCount = this.hand.getAceCount();
+
+        while (value > 21 && aceCount > 0) {
+            value -= 10;
+            aceCount--;
+        }
+
+        return value;
     }
 
     public void hit(Card card) {
@@ -38,9 +52,10 @@ public class Player implements ActorInterface{
 
     public boolean isBust() {
         if (this.getHandvalue() > 21) {
-            return true;
+            this.isBust = true;
+            return this.isBust;
         }
-        return false;
+        return this.isBust;
     }
 
     public String getName() {
@@ -66,6 +81,32 @@ public class Player implements ActorInterface{
 
     public int getActiveBet() {
         return this.activeBet;
+    }
+
+    public void win() {
+        this.deposit(activeBet * 2);
+        this.activeBet = 0;
+    }
+
+    public void lose() {
+        this.activeBet = 0;
+    }
+
+    public void even() {
+        this.deposit(activeBet);
+        this.activeBet = 0;
+    }
+
+    public void clearHand() {
+        this.hand.clearHand();
+        this.isBust = false;
+    }
+
+    public boolean hasBlackjack() {
+        if (this.getHandvalue() == 21 && this.getHand().getCards().size() == 2) {
+            return true;
+        }
+        return false;
     }
 
     @Override

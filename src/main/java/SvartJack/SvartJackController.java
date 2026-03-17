@@ -1,12 +1,15 @@
 package SvartJack;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 
 public class SvartJackController {
 
@@ -25,6 +28,11 @@ public class SvartJackController {
     private Button depositButton2;
     @FXML
     private Button placeBetsButton;
+    @FXML
+    private Button resetButton;
+    
+    @FXML
+    private ImageView dealerPointer;
     
     @FXML
     private Button betButton;
@@ -98,6 +106,10 @@ public class SvartJackController {
     private Label dealerScore;
     
     private ArrayList<Label> scoreLabels;
+
+    /* Variables for hit functionality */
+
+    private int playerHitIndex = 0;
     
     @FXML
     public void initialize() {
@@ -124,6 +136,16 @@ public class SvartJackController {
         betButton.setDisable(true);
         betAmountTextField.setVisible(false);
         betAmountTextField.setDisable(true);
+
+        dealerPointer.setVisible(false);
+
+        resetButton.setVisible(false);
+        resetButton.setDisable(true);
+
+        if (svartJack.getPlayers().size() > 0) {
+            depositButton1.setVisible(true);
+            depositButton1.setDisable(false);
+        }
     }
 
     /*Funkjsonalitet */
@@ -287,7 +309,7 @@ public class SvartJackController {
         }
     }
 
-    @FXML
+    //@FXML
     public void startDealing() {
         svartJack.deal();
 
@@ -305,5 +327,144 @@ public class SvartJackController {
         });
 
         dealerScore.setText(String.valueOf(svartJack.getDealer().getHandvalue()));
+
+        dealerPointer.setVisible(true);
+        startHitting();
+    }
+
+    public void startHitting() {
+        this.playerHitIndex = 0;
+        nextPlayerHit();
+    }
+
+    public void nextPlayerHit() {
+
+        if (svartJack.getDeck().get_size() < 20) {
+            svartJack.getDeck().add_deck();
+        }
+
+        List<Player> players = svartJack.getPlayers();
+
+        while (playerHitIndex < players.size() && players.get(playerHitIndex).getActiveBet() == 0) {
+            playerHitIndex++;
+        }
+
+        if (playerHitIndex < players.size()) {
+            dealerPointer.setTranslateX(playerHitIndex * 270);
+        }
+        else {
+            dealerHit();
+            dealerPointer.setVisible(false);
+            dealerPointer.setTranslateX(0);
+        }
+    }
+
+    @FXML
+    public void hit() {
+        Player player = svartJack.getPlayers().get(playerHitIndex);
+        svartJack.hit(player);
+        scoreLabels.get(playerHitIndex).setText(String.valueOf(player.getHandvalue()));
+
+        if (player.isBust()) {
+            scoreLabels.get(playerHitIndex).setTextFill(Color.web("#800020"));
+            playerHitIndex++;
+            nextPlayerHit();
+        }
+    }
+
+    public void stand() {
+        playerHitIndex++;
+        nextPlayerHit();
+    }
+
+    public void split() {
+        
+    }
+
+    public void dealerHit() {
+        Dealer dealer = svartJack.getDealer();
+
+        while (dealer.canHit()) {
+            svartJack.hit(dealer);
+            dealerScore.setText(String.valueOf(dealer.getHandvalue()));
+        }
+
+        if (dealer.isBust()) {
+            dealerScore.setTextFill(Color.web("#800020"));
+        }
+
+        resetButton.setVisible(true);
+        resetButton.setDisable(false);
+    }
+
+    public void results() {
+
+        Dealer dealer = svartJack.getDealer();
+        int dealerHandvalue = dealer.getHandvalue();
+        List<Player> players = svartJack.getPlayers();
+        
+        if (dealer.isBust()) {
+            players.forEach(c -> {
+                if (c.isBust()) {
+                    c.lose();
+                }
+                else if (c.hasBlackjack()) {
+                    c.deposit(c.getActiveBet() / 2);
+                    c.win();
+                }
+                else {
+                    c.win();
+                }
+            });
+        }
+        else {
+            players.forEach(c -> {
+                if (c.isBust()) {
+                    c.lose();
+                }
+                else if (c.hasBlackjack() && !dealer.hasBlackjack()) {
+                    c.deposit((c.getActiveBet() / 2) );
+                    c.win();
+                }
+                else if (dealerHandvalue < c.getHandvalue()) {
+                    c.win();
+                }
+                else if (dealerHandvalue > c.getHandvalue()) {
+                    c.lose();
+                }
+                else {
+                    c.even();
+                }
+            });
+        }
+    }
+
+    public void reset() {
+
+        List<Player> players = svartJack.getPlayers();
+        Dealer dealer = svartJack.getDealer();
+
+        results();
+
+        int numOfPlayers = svartJack.getPlayers().size();
+
+        for (int index = 0; index < numOfPlayers; index++) {
+            balanceLabels.get(index).setText(String.valueOf(players.get(index).getBalance()));
+        }
+
+        players.forEach(c -> c.clearHand());
+        dealer.clearHand();
+        scoreLabels.forEach(c -> {
+            c.setText("");
+            c.setTextFill(Color.WHITE);
+        });
+        betLabels.forEach(c -> c.setText(""));
+        dealerScore.setText("");
+        dealerScore.setTextFill(Color.WHITE);
+        
+        placeBetsButton.setVisible(true);
+        placeBetsButton.setDisable(false);
+
+        initialize();
     }
 }

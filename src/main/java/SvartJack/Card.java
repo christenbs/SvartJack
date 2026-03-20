@@ -3,16 +3,25 @@ package SvartJack;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import javafx.scene.image.Image;
+
 public class Card {
 
+    private final String PATH = "/Users/christenstaib/Desktop/Objektprosjekt/src/main/resources/SvartJack/images/playing_cards/";
     private final ArrayList<Character> SUITS = new ArrayList<>(Arrays.asList('C', 'H', 'S', 'D'));
     
     private char suit;
     private int value;
+    private Image image;
 
     public Card(char suit, int value) {
+        validateSuit(suit);
+        validateValue(value);
+
         this.suit = suit;
         this.value = value;
+
+        this.image = new Image("file:" + PATH + String.valueOf(suit) + String.valueOf(value) + ".png");
     }
 
     public char getSuit() {
@@ -25,6 +34,10 @@ public class Card {
 
     public int getValue() {
         return value;
+    }
+
+    public Image getImage() {
+        return this.image;
     }
 
     public void validateSuit(char suit) {

@@ -22,11 +22,15 @@
 
 <!--Dealer-->
     <VBox fx:id="dealer" prefWidth="200" prefHeight="150" layoutX="620" layoutY="50">
-        <children>
-            <Label fx:id="dealerLabel" text="Dealer" layoutX="10" layoutY="10"/>
-        </children>
+        <Label fx:id="dealerLabel" text="Dealer" layoutX="10" layoutY="10"/>
+        <Pane fx:id="dealerCards"/>
         <StackPane>
             <Label fx:id="dealerScore" text="" StackPane.alignment="CENTER"/>
+        </StackPane>
+    </VBox>
+
+    <VBox fx:id="placeBetsVBox">
+        <StackPane>
             <Button fx:id="placeBetsButton" text="Place bets" onAction="#placeBets"/>
             <Button fx:id="resetButton" text="Reset table" onAction="#reset"/>
             <Button fx:id="betButton" text="Bet" onAction="#bet"/>
@@ -64,6 +68,7 @@
                     <Label fx:id="player1ActiveBet" text="" StackPane.alignment="CENTER"/>
                     <Label fx:id="player1Score" text="" StackPane.alignment="CENTER"/>
                 </StackPane>
+                <Pane fx:id="player1Cards" StackPane.alignment="CENTER"/>
             </VBox>
 
             <VBox fx:id="player2" spacing="5" alignment="TOP_LEFT">
@@ -74,6 +79,7 @@
                     <Label fx:id="player2ActiveBet" text="" StackPane.alignment="CENTER"/>
                     <Label fx:id="player2Score" text="" StackPane.alignment="CENTER"/>
                 </StackPane>
+                <Pane fx:id="player2Cards"/>
             </VBox>
 
             <VBox fx:id="player3" spacing="5" alignment="TOP_LEFT">
@@ -84,6 +90,7 @@
                     <Label fx:id="player3ActiveBet" text="" StackPane.alignment="CENTER"/>
                     <Label fx:id="player3Score" text="" StackPane.alignment="CENTER"/>
                 </StackPane>
+                <Pane fx:id="player3Cards"/>
             </VBox>
 
             <VBox fx:id="player4" spacing="5" alignment="TOP_LEFT">
@@ -94,6 +101,7 @@
                     <Label fx:id="player4ActiveBet" text="" StackPane.alignment="CENTER"/>
                     <Label fx:id="player4Score" text="" StackPane.alignment="CENTER"/>
                 </StackPane>
+                <Pane fx:id="player4Cards"/>
             </VBox>
 
             <VBox fx:id="player5" spacing="5" alignment="TOP_LEFT">
@@ -104,6 +112,7 @@
                     <Label fx:id="player5ActiveBet" text="" StackPane.alignment="CENTER"/>
                     <Label fx:id="player5Score" text="" StackPane.alignment="CENTER"/>
                 </StackPane>
+                <Pane fx:id="player5Cards"/>
             </VBox>
     </HBox>
 

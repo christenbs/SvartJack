@@ -9,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
 public class SvartJackController {
@@ -110,13 +111,31 @@ public class SvartJackController {
     /* Variables for hit functionality */
 
     private int playerHitIndex = 0;
-    
+
+    /* Variables for card view*/
+
+    @FXML
+    private Pane player1Cards;
+    @FXML
+    private Pane player2Cards;
+    @FXML
+    private Pane player3Cards;
+    @FXML
+    private Pane player4Cards;
+    @FXML
+    private Pane player5Cards;
+    @FXML
+    private Pane dealerCards;
+
+    private ArrayList<Pane> playerCardsPane;
+
     @FXML
     public void initialize() {
         this.labels = new ArrayList<>(Arrays.asList(player1Label, player2Label, player3Label, player4Label, player5Label));
         this.balanceLabels = new ArrayList<>(Arrays.asList(player1Balance, player2Balance, player3Balance, player4Balance, player5Balance));
         this.betLabels = new ArrayList<>(Arrays.asList(player1ActiveBet, player2ActiveBet, player3ActiveBet, player4ActiveBet, player5ActiveBet));
         this.scoreLabels = new ArrayList<>(Arrays.asList(player1Score, player2Score, player3Score, player4Score, player5Score));
+        this.playerCardsPane = new ArrayList<>(Arrays.asList(player1Cards, player2Cards, player3Cards, player4Cards, player5Cards));
 
         addPlayerButton2.setVisible(false);
         addPlayerButton2.setDisable(true);
@@ -303,8 +322,13 @@ public class SvartJackController {
             betLabelIndex++;
             nextPlayerBet(); 
         }
+        else if (amount < 0) {
+            betAmountTextField.setPromptText("Bet mus tbe bigger than 0");
+            betAmountTextField.clear();;
+            
+        }
         else {
-            betAmountTextField.setPromptText("Bet was bigger than your balance");
+            betAmountTextField.setPromptText("Can not bet that much");
             betAmountTextField.clear();;
         }
     }
@@ -330,6 +354,8 @@ public class SvartJackController {
 
         dealerPointer.setVisible(true);
         startHitting();
+
+        showCards();
     }
 
     public void startHitting() {
@@ -357,12 +383,19 @@ public class SvartJackController {
             dealerPointer.setVisible(false);
             dealerPointer.setTranslateX(0);
         }
+        System.out.println("Deck size: " + svartJack.getDeck().get_size());
     }
 
     @FXML
     public void hit() {
         Player player = svartJack.getPlayers().get(playerHitIndex);
         svartJack.hit(player);
+
+        System.out.println(player.getName() + "'s hand:" + player.getHand());
+
+        Pane pane = playerCardsPane.get(playerHitIndex);
+        showCard(player.getHand().getCards().getLast(), pane);
+
         scoreLabels.get(playerHitIndex).setText(String.valueOf(player.getHandvalue()));
 
         if (player.isBust()) {
@@ -458,6 +491,7 @@ public class SvartJackController {
             c.setText("");
             c.setTextFill(Color.WHITE);
         });
+
         betLabels.forEach(c -> c.setText(""));
         dealerScore.setText("");
         dealerScore.setTextFill(Color.WHITE);
@@ -465,6 +499,37 @@ public class SvartJackController {
         placeBetsButton.setVisible(true);
         placeBetsButton.setDisable(false);
 
+        playerCardsPane.forEach(c -> c.getChildren().clear());
+        dealerCards.getChildren().clear();
+
         initialize();
+    }
+
+    public void showCards() {
+        ArrayList<Player> players = svartJack.getPlayers();
+        Dealer dealer = svartJack.getDealer();
+
+        players.forEach(p -> {
+            int index = players.indexOf(p);
+            Pane pane = playerCardsPane.get(index);
+
+            p.getHand().getCards().forEach(c -> showCard(c, pane));
+        });
+
+        dealer.getHand().getCards().forEach(c -> showCard(c, dealerCards));
+    }
+
+    public void showCard(Card card, Pane pane) {
+        double offset = 20;
+
+        ImageView cardView = new ImageView(card.getImage());
+        cardView.setFitWidth(100);
+        cardView.setPreserveRatio(true);
+
+        int numCards = pane.getChildren().size();
+        cardView.setLayoutX(10 + (numCards * offset)); 
+        cardView.setLayoutY(0);
+
+        pane.getChildren().add(cardView);
     }
 }

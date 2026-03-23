@@ -2,15 +2,19 @@ package SvartJack;
 
 import java.util.ArrayList;
 
+import javafx.scene.image.Image;
+
 public class SvartJack {
     
     private Dealer dealer;
     private ArrayList<Player> players = new ArrayList<>();
     private CardDeck deck = new CardDeck();
+    private Image cardBack;
 
     public SvartJack() {
 
         this.dealer = new Dealer();
+        this.cardBack = new Image("file:/Users/christenstaib/Desktop/Objektprosjekt/src/main/resources/SvartJack/images/card_back.png");
     }
 
     public void add_player(String name) {
@@ -56,12 +60,14 @@ public class SvartJack {
 
     public void hit(Player player) {
         player.hit(this.deck.getDeck().remove(0));
-
-        //this.players.forEach(c -> c.getHand().add_card((this.deck.getDeck().remove(0))));
     }
 
     public void hit(Dealer dealer) {
         dealer.hit(this.deck.getDeck().remove(0));
+    }
+
+    public Image getCardBack() {
+        return this.cardBack;
     }
 
     public void validateName(String name) {

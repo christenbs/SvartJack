@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -156,6 +157,7 @@ public class SvartJackController {
         betAmountTextField.setVisible(false);
         betAmountTextField.setDisable(true);
 
+        dealerScore.setVisible(false);
         dealerPointer.setVisible(false);
 
         resetButton.setVisible(false);
@@ -293,9 +295,15 @@ public class SvartJackController {
         if (betLabelIndex < svartJack.getPlayers().size()) {
             Player player = svartJack.getPlayers().get(betLabelIndex);
 
-            betAmountTextField.clear();
-            betAmountTextField.setPromptText(player.getName() + " bet amount");
+            if (player.getBalance() == 0) {
+                betLabelIndex++;
+                nextPlayerBet();
+            } else {
+                betAmountTextField.clear();
+                betAmountTextField.setPromptText(player.getName() + " bet amount");
+            }
         }
+
         else {
             betAmountTextField.setVisible(false);
             betAmountTextField.setDisable(true);
@@ -333,7 +341,6 @@ public class SvartJackController {
         }
     }
 
-    //@FXML
     public void startDealing() {
         svartJack.deal();
 
@@ -370,10 +377,10 @@ public class SvartJackController {
         }
 
         List<Player> players = svartJack.getPlayers();
-
-        while (playerHitIndex < players.size() && players.get(playerHitIndex).getActiveBet() == 0) {
-            playerHitIndex++;
-        }
+        
+        while (playerHitIndex < players.size() && (players.get(playerHitIndex).getHandvalue() >= 21 || players.get(playerHitIndex).getActiveBet() == 0)) {
+        playerHitIndex++;
+    }
 
         if (playerHitIndex < players.size()) {
             dealerPointer.setTranslateX(playerHitIndex * 270);
@@ -403,6 +410,10 @@ public class SvartJackController {
             playerHitIndex++;
             nextPlayerHit();
         }
+        else if (player.getHandvalue() == 21) {
+            playerHitIndex++;
+            nextPlayerHit();
+        }
     }
 
     public void stand() {
@@ -426,6 +437,11 @@ public class SvartJackController {
             dealerScore.setTextFill(Color.web("#800020"));
         }
 
+        dealerCards.getChildren().clear();
+
+        dealer.getHand().getCards().forEach(c -> showCard(c, dealerCards));
+
+        dealerScore.setVisible(true);
         resetButton.setVisible(true);
         resetButton.setDisable(false);
     }
@@ -516,7 +532,8 @@ public class SvartJackController {
             p.getHand().getCards().forEach(c -> showCard(c, pane));
         });
 
-        dealer.getHand().getCards().forEach(c -> showCard(c, dealerCards));
+        showCard(dealer.getHand().getCards().get(0), dealerCards);
+        showCard(svartJack.getCardBack(), dealerCards);
     }
 
     public void showCard(Card card, Pane pane) {
@@ -524,6 +541,20 @@ public class SvartJackController {
 
         ImageView cardView = new ImageView(card.getImage());
         cardView.setFitWidth(100);
+        cardView.setPreserveRatio(true);
+
+        int numCards = pane.getChildren().size();
+        cardView.setLayoutX(10 + (numCards * offset)); 
+        cardView.setLayoutY(0);
+
+        pane.getChildren().add(cardView);
+    }
+
+    public void showCard(Image card, Pane pane) {
+        double offset = 20;
+
+        ImageView cardView = new ImageView(card);
+        cardView.setFitWidth(103);
         cardView.setPreserveRatio(true);
 
         int numCards = pane.getChildren().size();

@@ -1,6 +1,7 @@
 package SvartJack;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 import javafx.scene.image.Image;
 
@@ -22,6 +23,11 @@ public class SvartJack {
         validateName(name);
 
         this.players.add(new Player(name));
+    }
+
+    public void add_player(Player player) {
+
+        this.players.add(player);
     }
 
     public void deal() {
@@ -77,6 +83,12 @@ public class SvartJack {
         if (name.length() < 3) {
             throw new IllegalArgumentException("Nme must be longer than 2 characters");
         }
+    }
+
+    public ArrayList<String> getPlayerNames() {
+        return this.players.stream()
+        .map(Player::getName)
+        .collect(Collectors.toCollection(ArrayList::new));
     }
 
     public static void main(String[] args) {

@@ -120,7 +120,12 @@
     <VBox fx:id="actionButtonsVBox" spacing="10">
         <Button fx:id="hitButton" text="Hit" layoutX="50" layoutY="300" prefWidth="80" prefHeight="40" onAction="#hit"/>
         <Button fx:id="standButton" text="Stand" layoutX="50" layoutY="360" prefWidth="80" prefHeight="40" onAction="#stand"/>
-        <Button fx:id="splitButton" text="Split" layoutX="50" layoutY="420" prefWidth="80" prefHeight="40" onAction="#split"/>
+    </VBox>
+
+    <VBox fx:id="leaveTableVBox" spacing="10" alignment="CENTER">
+        <Button fx:id="leaveTable1" text="Leave table" prefWidth="120" prefHeight="40" onAction="#leaveTable1"/>
+        <Button fx:id="leaveTable" text="Leave table" prefWidth="120" prefHeight="40" onAction="#leaveTable"/>
+        <TextField fx:id="leaveTableName" promptText="Players name"/>
     </VBox>
 
     <ImageView fx:id="dealerPointer" layoutX="130" layoutY="400" fitWidth="100" fitHeight="100" rotate="180">

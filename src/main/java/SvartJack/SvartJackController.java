@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.OptionalInt;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -13,9 +14,15 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
+import java.nio.file.Paths;
+
 public class SvartJackController {
 
     private SvartJack svartJack = new SvartJack();
+
+    private final CSVManager csvManager = new CSVManager(
+        Paths.get("/Users/christenstaib/Desktop/Objektprosjekt/src/main/java/SvartJack/data.csv")
+    );
 
     /*Felter som kan manipuleres */
     @FXML
@@ -38,15 +45,21 @@ public class SvartJackController {
     
     @FXML
     private Button betButton;
-
+    
     @FXML
     private TextField depositNameTextField;
     @FXML
     private TextField depositAmountTextField;
-
+    
     @FXML
     private TextField betAmountTextField;
-
+    
+    @FXML
+    private Button leaveTable1;
+    @FXML
+    private Button leaveTable;
+    @FXML
+    private TextField leaveTableName;
     /*Sette navn på spillere */
     @FXML
     private Label player1Label;
@@ -59,7 +72,7 @@ public class SvartJackController {
     @FXML
     private Label player5Label;
 
-    private ArrayList<Label> labels;
+    private ArrayList<Label> nameLabels;
     private int newPlayerIndex = 0;  
     
     /*Sette balance på spillere */
@@ -132,7 +145,7 @@ public class SvartJackController {
 
     @FXML
     public void initialize() {
-        this.labels = new ArrayList<>(Arrays.asList(player1Label, player2Label, player3Label, player4Label, player5Label));
+        this.nameLabels = new ArrayList<>(Arrays.asList(player1Label, player2Label, player3Label, player4Label, player5Label));
         this.balanceLabels = new ArrayList<>(Arrays.asList(player1Balance, player2Balance, player3Balance, player4Balance, player5Balance));
         this.betLabels = new ArrayList<>(Arrays.asList(player1ActiveBet, player2ActiveBet, player3ActiveBet, player4ActiveBet, player5ActiveBet));
         this.scoreLabels = new ArrayList<>(Arrays.asList(player1Score, player2Score, player3Score, player4Score, player5Score));
@@ -163,9 +176,19 @@ public class SvartJackController {
         resetButton.setVisible(false);
         resetButton.setDisable(true);
 
+        leaveTable1.setVisible(false);
+        leaveTable1.setDisable(true);
+        leaveTable.setVisible(false);
+        leaveTable.setDisable(true);
+        leaveTableName.setVisible(false);
+        leaveTableName.setDisable(true);
+
         if (svartJack.getPlayers().size() > 0) {
             depositButton1.setVisible(true);
             depositButton1.setDisable(false);
+
+            leaveTable1.setVisible(true);
+            leaveTable1.setDisable(false);
         }
     }
 
@@ -184,38 +207,64 @@ public class SvartJackController {
     public void addPlayer() {
         String name = addPlayerTextField.getText();
 
+        // Finn første ledige plass
+        OptionalInt optionalIndex = java.util.stream.IntStream.range(0, nameLabels.size())
+                .filter(i -> nameLabels.get(i).getText().isEmpty())
+                .findFirst();
 
+        if (!optionalIndex.isPresent()) {
+            addPlayerTextField.setPromptText("No free slots");
+            addPlayerTextField.clear();
+            return;
+        }
+
+        this.newPlayerIndex = optionalIndex.getAsInt();
+        this.setBalanceIndex = newPlayerIndex;
+
+        // Validering av navn
         if (name.length() < 3) {
-            addPlayerTextField.setPromptText("Atleast 3 characters");
+            addPlayerTextField.setPromptText("At least 3 characters");
             addPlayerTextField.clear();
+            return;
         }
-        else if (svartJack.getPlayers().size() > 4) {
-            addPlayerTextField.setPromptText("Maksimum 5 players");
+        if (svartJack.getPlayers().size() > 4) {
+            addPlayerTextField.setPromptText("Maximum 5 players");
             addPlayerTextField.clear();
+            return;
         }
-        else {
+        if (svartJack.getPlayerNames().contains(name)) {
+            addPlayerTextField.setPromptText("Name already taken");
+            addPlayerTextField.clear();
+            return;
+        }
 
-            if (svartJack.getPlayers().size() == 0) {
-                depositButton1.setVisible(true);
-                depositButton1.setDisable(false);
-            }
-
-            svartJack.add_player(name);
-            addPlayerTextField.clear();
-            
-            labels.get(newPlayerIndex).setText(name);
-            balanceLabels.get(setBalanceIndex).setText(Integer.toString(svartJack.getPlayers().getLast().getBalance()));
-            newPlayerIndex++;
-            setBalanceIndex++;
-    
-            addPlayerTextField.setPromptText("Player name");
-            addPlayerTextField.setVisible(false);
-            addPlayerTextField.setDisable(true);
-            addPlayerButton2.setVisible(false);
-            addPlayerButton2.setDisable(true);
-            addPlayerButton1.setVisible(true);
-            addPlayerButton1.setDisable(false);
+        // Lag spilleren
+        Player newPlayer = new Player(name);
+        if (csvManager.getAllNames().contains(name)) {
+            newPlayer.deposit(csvManager.getBalance(name));
         }
+        svartJack.add_player(newPlayer);
+
+        // Oppdater GUI
+        nameLabels.get(newPlayerIndex).setText(name);
+        balanceLabels.get(setBalanceIndex).setText(Integer.toString(newPlayer.getBalance()));
+
+        if (svartJack.getPlayers().size() == 1) {
+            depositButton1.setVisible(true);
+            depositButton1.setDisable(false);
+            leaveTable1.setVisible(true);
+            leaveTable1.setDisable(false);
+        }
+
+        // Tilbakestill input
+        addPlayerTextField.clear();
+        addPlayerTextField.setPromptText("Player name");
+        addPlayerTextField.setVisible(false);
+        addPlayerTextField.setDisable(true);
+        addPlayerButton2.setVisible(false);
+        addPlayerButton2.setDisable(true);
+        addPlayerButton1.setVisible(true);
+        addPlayerButton1.setDisable(false);
     }
 
     @FXML
@@ -421,10 +470,6 @@ public class SvartJackController {
         nextPlayerHit();
     }
 
-    public void split() {
-        
-    }
-
     public void dealerHit() {
         Dealer dealer = svartJack.getDealer();
 
@@ -562,5 +607,85 @@ public class SvartJackController {
         cardView.setLayoutY(0);
 
         pane.getChildren().add(cardView);
+    }
+
+    @FXML
+    public void leaveTable1() {
+        leaveTable1.setVisible(false);
+        leaveTable1.setDisable(true);
+
+        leaveTable.setVisible(true);
+        leaveTable.setDisable(false);
+        leaveTableName.setVisible(true);
+        leaveTableName.setDisable(false);
+    }
+
+    @FXML
+    public void leaveTable() {
+        String playerName = leaveTableName.getText();
+
+        // Finn spilleren i svartJack
+        Optional<Player> optionalPlayer = this.svartJack.getPlayers().stream()
+                .filter(p -> p.getName().equals(playerName))
+                .findFirst();
+
+        if (optionalPlayer.isPresent()) {
+            Player player = optionalPlayer.get();
+
+            // Lag PlayerData og oppdater CSV via CSVManager
+            PlayerData data = new PlayerData(player.getName(), player.getBalance());
+            csvManager.saveOrUpdatePlayer(data);
+
+            // Finn index i spillerlisten
+            int playerIndex = this.svartJack.getPlayers().indexOf(player);
+
+            if (playerIndex >= 0) {
+                // Fjern spilleren fra listen
+                this.svartJack.getPlayers().remove(playerIndex);
+
+                // Flytt alle labels og balanser nedover for å fylle tomrommet
+                for (int i = playerIndex; i < nameLabels.size() - 1; i++) {
+                    // Oppdater navn
+                    nameLabels.get(i).setText(nameLabels.get(i + 1).getText());
+                    // Oppdater balance
+                    balanceLabels.get(i).setText(balanceLabels.get(i + 1).getText());
+                    // Oppdater bet
+                    betLabels.get(i).setText(betLabels.get(i + 1).getText());
+                    // Oppdater score
+                    scoreLabels.get(i).setText(scoreLabels.get(i + 1).getText());
+                    // Flytt kortpane
+                    Pane currentPane = playerCardsPane.get(i);
+                    Pane nextPane = playerCardsPane.get(i + 1);
+                    currentPane.getChildren().clear();
+                    nextPane.getChildren().forEach(card -> currentPane.getChildren().add(card));
+                    nextPane.getChildren().clear();
+                }
+
+                // Nullstill siste plass
+                int lastIndex = nameLabels.size() - 1;
+                nameLabels.get(lastIndex).setText("");
+                balanceLabels.get(lastIndex).setText("");
+                betLabels.get(lastIndex).setText("");
+                scoreLabels.get(lastIndex).setText("");
+                playerCardsPane.get(lastIndex).getChildren().clear();
+            }
+
+            // Skjul input-felt og knapp
+            leaveTableName.clear();
+            leaveTableName.setVisible(false);
+            leaveTableName.setDisable(true);
+            leaveTable.setVisible(false);
+            leaveTable.setDisable(true);
+
+            // Vis knappen for å forlate bordet hvis noen spillere er igjen
+            if (!this.svartJack.getPlayers().isEmpty()) {
+                leaveTable1.setVisible(true);
+                leaveTable1.setDisable(false);
+            }
+
+        } else {
+            leaveTableName.setPromptText("Invalid name");
+            leaveTableName.clear();
+        }
     }
 }

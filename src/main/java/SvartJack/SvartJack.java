@@ -1,6 +1,7 @@
 package SvartJack;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import javafx.scene.image.Image;
@@ -9,13 +10,20 @@ public class SvartJack {
     
     private Dealer dealer;
     private ArrayList<Player> players = new ArrayList<>();
-    private CardDeck deck = new CardDeck();
+    private CardDeck deck;
     private Image cardBack;
 
     public SvartJack() {
 
         this.dealer = new Dealer();
+        this.deck = new CardDeck();
         this.cardBack = new Image("file:/Users/christenstaib/Desktop/Objektprosjekt/src/main/resources/SvartJack/images/card_back.png");
+    }
+
+    public SvartJack(boolean image) {
+
+        this.dealer = new Dealer();
+        this.deck = new CardDeck(false);
     }
 
     public void add_player(String name) {
@@ -46,6 +54,44 @@ public class SvartJack {
 
     public void add_deck() {
         this.deck.add_deck();
+    }
+
+    public void add_deck(boolean image) {
+        this.deck.add_deck(image);
+    }
+
+    public void results() {
+        Dealer dealer = this.getDealer();
+        int dealerHandvalue = dealer.getHandvalue();
+        List<Player> players = this.getPlayers();
+
+        if (dealer.isBust()) {
+            players.forEach(c -> {
+                if (c.isBust()) {
+                    c.lose();
+                } else if (c.hasBlackjack()) {
+                    c.deposit(c.getActiveBet() / 2);
+                    c.win();
+                } else {
+                    c.win();
+                }
+            });
+        } else {
+            players.forEach(c -> {
+                if (c.isBust()) {
+                    c.lose();
+                } else if (c.hasBlackjack() && !dealer.hasBlackjack()) {
+                    c.deposit(c.getActiveBet() / 2);
+                    c.win();
+                } else if (dealerHandvalue < c.getHandvalue()) {
+                    c.win();
+                } else if (dealerHandvalue > c.getHandvalue()) {
+                    c.lose();
+                } else {
+                    c.even();
+                }
+            });
+        }
     }
     
     public Dealer getDealer() {

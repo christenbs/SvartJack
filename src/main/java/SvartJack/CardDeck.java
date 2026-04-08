@@ -11,13 +11,43 @@ public class CardDeck {
     private ArrayList<Card> deck = new ArrayList<>();
 
     public CardDeck() {
+        for (int index = 0; index < 4; index++) {
+            this.deck.addAll(makeDeck());
+        }
+
+        Collections.shuffle(this.deck);
+    }
+
+    public ArrayList<Card> makeDeck() {
+        ArrayList<Card> out = new ArrayList<>();
 
         for (Character suit : SUITS) {
             for (int value = 1; value < 14; value++) {
-                this.deck.add(new Card(suit, value));
+                out.add(new Card(suit, value));
             }
         }
+
+        return out;
+    }
+
+    public CardDeck(boolean image) {
+        for (int index = 0; index < 4; index++) {
+            this.deck.addAll(makeDeck(false));
+        }
+
         Collections.shuffle(this.deck);
+    }
+
+    public ArrayList<Card> makeDeck(boolean image) {
+        ArrayList<Card> out = new ArrayList<>();
+
+        for (Character suit : SUITS) {
+            for (int value = 1; value < 14; value++) {
+                out.add(new Card(suit, value, false));
+            }
+        }
+
+        return out;
     }
 
     public void add_deck() {
@@ -25,7 +55,13 @@ public class CardDeck {
         CardDeck new_deck = new CardDeck();
 
         this.deck.addAll(new_deck.getDeck());
+    }
 
+    public void add_deck(boolean image) {
+
+        CardDeck new_deck = new CardDeck(image);
+
+        this.deck.addAll(new_deck.getDeck());
     }
 
     public ArrayList<Card> getDeck() {

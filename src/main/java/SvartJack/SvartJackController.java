@@ -20,7 +20,7 @@ public class SvartJackController {
 
     private SvartJack svartJack = new SvartJack();
 
-    private final CSVManager csvManager = new CSVManager(
+    private final CSVManager CSVManager = new CSVManager(
         Paths.get("/Users/christenstaib/Desktop/Objektprosjekt/src/main/java/SvartJack/data.csv")
     );
 
@@ -192,7 +192,6 @@ public class SvartJackController {
         }
     }
 
-    /*Funkjsonalitet */
     @FXML
     public void addPlayer1() {
         addPlayerButton1.setVisible(false);
@@ -205,9 +204,8 @@ public class SvartJackController {
 
     @FXML
     public void addPlayer() {
-        String name = addPlayerTextField.getText();
+        String name = addPlayerTextField.getText().toLowerCase();
 
-        // Finn første ledige plass
         OptionalInt optionalIndex = java.util.stream.IntStream.range(0, nameLabels.size())
                 .filter(i -> nameLabels.get(i).getText().isEmpty())
                 .findFirst();
@@ -221,7 +219,6 @@ public class SvartJackController {
         this.newPlayerIndex = optionalIndex.getAsInt();
         this.setBalanceIndex = newPlayerIndex;
 
-        // Validering av navn
         if (name.length() < 3) {
             addPlayerTextField.setPromptText("At least 3 characters");
             addPlayerTextField.clear();
@@ -238,14 +235,12 @@ public class SvartJackController {
             return;
         }
 
-        // Lag spilleren
         Player newPlayer = new Player(name);
-        if (csvManager.getAllNames().contains(name)) {
-            newPlayer.deposit(csvManager.getBalance(name));
+        if (CSVManager.getAllNames().contains(name)) {
+            newPlayer.deposit(CSVManager.getBalance(name));
         }
         svartJack.add_player(newPlayer);
 
-        // Oppdater GUI
         nameLabels.get(newPlayerIndex).setText(name);
         balanceLabels.get(setBalanceIndex).setText(Integer.toString(newPlayer.getBalance()));
 
@@ -256,7 +251,6 @@ public class SvartJackController {
             leaveTable1.setDisable(false);
         }
 
-        // Tilbakestill input
         addPlayerTextField.clear();
         addPlayerTextField.setPromptText("Player name");
         addPlayerTextField.setVisible(false);
@@ -282,12 +276,18 @@ public class SvartJackController {
     @FXML
     public void deposit() {
         int amount;
-        String name = depositNameTextField.getText();
+        String name = depositNameTextField.getText().toLowerCase();
 
         try {
             amount = Integer.parseInt(depositAmountTextField.getText());
         } catch (NumberFormatException e) {
             depositAmountTextField.setPromptText("Enter a number");
+            depositAmountTextField.clear();
+            return;
+        }
+
+        if (amount <= 0) {
+            depositAmountTextField.setPromptText("Amount must positive");
             depositAmountTextField.clear();
             return;
         }
@@ -320,8 +320,10 @@ public class SvartJackController {
         depositNameTextField.clear();
         depositAmountTextField.clear();
     }
+
     @FXML
     public void placeBets() {
+
         if (svartJack.getPlayers().size() > 0) {
             placeBetsButton.setVisible(false);
             placeBetsButton.setDisable(true);
@@ -390,28 +392,47 @@ public class SvartJackController {
         }
     }
 
+    private boolean hasValidBets() {
+        return betLabels.stream().anyMatch(label -> {
+            String text = label.getText();
+
+            if (text.isEmpty()) return false;
+
+            try {
+                return Integer.parseInt(text) > 0;
+            } catch (NumberFormatException e) {
+                return false;
+            }
+        });
+    }
+
     public void startDealing() {
+        if (!hasValidBets()) {
+            System.out.println("Ingen spillere har lagt inn bets!");
+            reset();
+            return;
+        }
         svartJack.deal();
-
+    
         System.out.println(svartJack.getDealer().getHand());
-
+    
         svartJack.getPlayers().stream().forEach(c -> {
             System.out.println(c.getHand());
         });
-
+    
         svartJack.getPlayers().forEach(c -> {
             if (c.getHandvalue() > 0) {
                 int index = svartJack.getPlayers().indexOf(c);
                 scoreLabels.get(index).setText(String.valueOf(c.getHandvalue()));
             }
         });
-
+    
         dealerScore.setText(String.valueOf(svartJack.getDealer().getHandvalue()));
-
+    
         dealerPointer.setVisible(true);
         startHitting();
-
-        showCards();
+    
+        showCards(); 
     }
 
     public void startHitting() {
@@ -492,45 +513,7 @@ public class SvartJackController {
     }
 
     public void results() {
-
-        Dealer dealer = svartJack.getDealer();
-        int dealerHandvalue = dealer.getHandvalue();
-        List<Player> players = svartJack.getPlayers();
-        
-        if (dealer.isBust()) {
-            players.forEach(c -> {
-                if (c.isBust()) {
-                    c.lose();
-                }
-                else if (c.hasBlackjack()) {
-                    c.deposit(c.getActiveBet() / 2);
-                    c.win();
-                }
-                else {
-                    c.win();
-                }
-            });
-        }
-        else {
-            players.forEach(c -> {
-                if (c.isBust()) {
-                    c.lose();
-                }
-                else if (c.hasBlackjack() && !dealer.hasBlackjack()) {
-                    c.deposit((c.getActiveBet() / 2) );
-                    c.win();
-                }
-                else if (dealerHandvalue < c.getHandvalue()) {
-                    c.win();
-                }
-                else if (dealerHandvalue > c.getHandvalue()) {
-                    c.lose();
-                }
-                else {
-                    c.even();
-                }
-            });
-        }
+        svartJack.results();
     }
 
     public void reset() {
@@ -622,9 +605,8 @@ public class SvartJackController {
 
     @FXML
     public void leaveTable() {
-        String playerName = leaveTableName.getText();
+        String playerName = leaveTableName.getText().toLowerCase();
 
-        // Finn spilleren i svartJack
         Optional<Player> optionalPlayer = this.svartJack.getPlayers().stream()
                 .filter(p -> p.getName().equals(playerName))
                 .findFirst();
@@ -632,28 +614,22 @@ public class SvartJackController {
         if (optionalPlayer.isPresent()) {
             Player player = optionalPlayer.get();
 
-            // Lag PlayerData og oppdater CSV via CSVManager
             PlayerData data = new PlayerData(player.getName(), player.getBalance());
-            csvManager.saveOrUpdatePlayer(data);
+            CSVManager.saveOrUpdatePlayer(data);
 
-            // Finn index i spillerlisten
+            // Finn index til spilleren
             int playerIndex = this.svartJack.getPlayers().indexOf(player);
 
+            //Sjekker om bordet er tomt og flytter
             if (playerIndex >= 0) {
-                // Fjern spilleren fra listen
                 this.svartJack.getPlayers().remove(playerIndex);
 
-                // Flytt alle labels og balanser nedover for å fylle tomrommet
+                // Flytt resterende spillere mot venstre
                 for (int i = playerIndex; i < nameLabels.size() - 1; i++) {
-                    // Oppdater navn
                     nameLabels.get(i).setText(nameLabels.get(i + 1).getText());
-                    // Oppdater balance
                     balanceLabels.get(i).setText(balanceLabels.get(i + 1).getText());
-                    // Oppdater bet
                     betLabels.get(i).setText(betLabels.get(i + 1).getText());
-                    // Oppdater score
                     scoreLabels.get(i).setText(scoreLabels.get(i + 1).getText());
-                    // Flytt kortpane
                     Pane currentPane = playerCardsPane.get(i);
                     Pane nextPane = playerCardsPane.get(i + 1);
                     currentPane.getChildren().clear();
@@ -661,7 +637,7 @@ public class SvartJackController {
                     nextPane.getChildren().clear();
                 }
 
-                // Nullstill siste plass
+                // Nullstill gammel plass
                 int lastIndex = nameLabels.size() - 1;
                 nameLabels.get(lastIndex).setText("");
                 balanceLabels.get(lastIndex).setText("");
@@ -677,8 +653,8 @@ public class SvartJackController {
             leaveTable.setVisible(false);
             leaveTable.setDisable(true);
 
-            // Vis knappen for å forlate bordet hvis noen spillere er igjen
-            if (!this.svartJack.getPlayers().isEmpty()) {
+            // Vis knappen for å forlate bordet hvis ikke bordet er tomt
+            if (this.svartJack.getPlayers().size() > 0) {
                 leaveTable1.setVisible(true);
                 leaveTable1.setDisable(false);
             }

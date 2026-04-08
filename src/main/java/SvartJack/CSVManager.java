@@ -12,13 +12,15 @@ public class CSVManager {
     public CSVManager(Path filePath) {
         this.filePath = filePath;
 
-        // Hvis filen ikke finnes, lag den med header
-        if (!Files.exists(filePath)) {
-            try (FileWriter writer = new FileWriter(filePath.toFile())) {
-                writer.write("name,balance\n");
-            } catch (IOException e) {
-                e.printStackTrace();
+        // Hvis filen ikke finnes eller er tom, lag den med header
+        try {
+            if (!Files.exists(filePath) || Files.size(filePath) == 0) {
+                try (FileWriter writer = new FileWriter(filePath.toFile())) {
+                    writer.write("name,balance\n");
+                }
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -37,9 +39,9 @@ public class CSVManager {
                 String[] parts = lines.get(i).split(",");
                 String existingName = parts[0];
 
-                if (existingName.equals(player.getName())) {
+                if (existingName.equalsIgnoreCase(player.getName())) {
                     // oppdater balance
-                    output.add(player.getName() + "," + player.getBalance());
+                    output.add(player.getName().toLowerCase() + "," + player.getBalance());
                     found = true;
                 } else {
                     output.add(lines.get(i));
@@ -48,7 +50,7 @@ public class CSVManager {
 
             // hvis ikke funnet, legg til på slutten
             if (!found) {
-                output.add(player.getName() + "," + player.getBalance());
+                output.add(player.getName().toLowerCase() + "," + player.getBalance());
             }
 
             Files.write(filePath, output);
@@ -71,7 +73,7 @@ public class CSVManager {
                     continue;
                 }
                 String[] parts = line.split(",");
-                names.add(parts[0]);
+                names.add(parts[0].toLowerCase());
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -119,7 +121,7 @@ public class CSVManager {
                 if (parts.length < 2) continue;
 
                 String name = parts[0];
-                if (name.equals(playerName)) {
+                if (name.equalsIgnoreCase(playerName)) {
                     return Integer.parseInt(parts[1]);
                 }
             }

@@ -24,6 +24,14 @@ public class Card {
         this.image = new Image("file:" + PATH + String.valueOf(suit) + String.valueOf(value) + ".png");
     }
 
+    public Card(char suit, int value, boolean image) {
+        validateSuit(suit);
+        validateValue(value);
+
+        this.suit = suit;
+        this.value = value;
+    }
+
     public char getSuit() {
         return suit;
     }

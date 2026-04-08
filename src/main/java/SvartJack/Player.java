@@ -9,7 +9,7 @@ public class Player implements ActorInterface{
     private boolean isBust = false;
 
     public Player(String name) {
-        this.name = name;
+        this.name = name.toLowerCase();
         this.hand = new Hand();
         this.balance = 0;
         this.activeBet = 0;

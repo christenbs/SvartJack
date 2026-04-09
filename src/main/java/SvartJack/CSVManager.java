@@ -8,7 +8,6 @@ public class CSVManager {
 
     private final Path filePath;
 
-    // Constructor: tar Path til CSV-filen
     public CSVManager(Path filePath) {
         this.filePath = filePath;
 
@@ -29,8 +28,7 @@ public class CSVManager {
         try {
             List<String> lines = Files.readAllLines(filePath);
             List<String> output = new ArrayList<>();
-            
-            // behold header
+
             output.add(lines.get(0));
 
             boolean found = false;
@@ -40,7 +38,6 @@ public class CSVManager {
                 String existingName = parts[0];
 
                 if (existingName.equalsIgnoreCase(player.getName())) {
-                    // oppdater balance
                     output.add(player.getName().toLowerCase() + "," + player.getBalance());
                     found = true;
                 } else {
@@ -69,7 +66,7 @@ public class CSVManager {
 
             while ((line = reader.readLine()) != null) {
                 if (firstLine) {
-                    firstLine = false; // hopp over header
+                    firstLine = false; 
                     continue;
                 }
                 String[] parts = line.split(",");
@@ -90,7 +87,7 @@ public class CSVManager {
 
             while ((line = reader.readLine()) != null) {
                 if (firstLine) {
-                    firstLine = false; // hopp over header
+                    firstLine = false; 
                     continue;
                 }
                 String[] parts = line.split(",");
@@ -113,7 +110,7 @@ public class CSVManager {
 
             while ((line = reader.readLine()) != null) {
                 if (firstLine) {
-                    firstLine = false; // hopp over header
+                    firstLine = false;
                     continue;
                 }
 
@@ -129,7 +126,6 @@ public class CSVManager {
             e.printStackTrace();
         }
 
-        // Dette skal ikke skje hvis navnet alltid finnes
         throw new RuntimeException("Player not found or invalid balance in CSV: " + playerName);
     }
 }

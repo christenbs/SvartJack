@@ -143,6 +143,7 @@ public class SvartJackController {
 
     private ArrayList<Pane> playerCardsPane;
 
+    /* Set all buttons to correct state before each round */
     @FXML
     public void initialize() {
         this.nameLabels = new ArrayList<>(Arrays.asList(player1Label, player2Label, player3Label, player4Label, player5Label));
@@ -192,6 +193,7 @@ public class SvartJackController {
         }
     }
 
+    /* Add player buttons */
     @FXML
     public void addPlayer1() {
         addPlayerButton1.setVisible(false);
@@ -261,6 +263,7 @@ public class SvartJackController {
         addPlayerButton1.setDisable(false);
     }
 
+    /* Deposit buttons */
     @FXML
     public void deposit1() {
         depositButton1.setVisible(false);
@@ -321,6 +324,7 @@ public class SvartJackController {
         depositAmountTextField.clear();
     }
 
+    /* Betting functionality */
     @FXML
     public void placeBets() {
 
@@ -406,6 +410,7 @@ public class SvartJackController {
         });
     }
 
+    /* Deal after betting is completed */
     public void startDealing() {
         if (!hasValidBets()) {
             System.out.println("Ingen spillere har lagt inn bets!");
@@ -435,6 +440,7 @@ public class SvartJackController {
         showCards(); 
     }
 
+    /* Hitting funktionality */
     public void startHitting() {
         this.playerHitIndex = 0;
         nextPlayerHit();
@@ -516,6 +522,7 @@ public class SvartJackController {
         svartJack.results();
     }
 
+    /* Reset after a round */
     public void reset() {
 
         List<Player> players = svartJack.getPlayers();
@@ -549,6 +556,7 @@ public class SvartJackController {
         initialize();
     }
 
+    /* Show card images */
     public void showCards() {
         ArrayList<Player> players = svartJack.getPlayers();
         Dealer dealer = svartJack.getDealer();
@@ -592,6 +600,7 @@ public class SvartJackController {
         pane.getChildren().add(cardView);
     }
 
+    /* Leave table */
     @FXML
     public void leaveTable1() {
         leaveTable1.setVisible(false);

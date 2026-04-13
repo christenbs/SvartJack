@@ -17,7 +17,7 @@ public class SvartJack {
 
         this.dealer = new Dealer();
         this.deck = new CardDeck();
-        this.cardBack = new Image("file:/Users/christenstaib/Desktop/Objektprosjekt/src/main/resources/SvartJack/images/card_back.png");
+        this.cardBack = new Image("file:src/main/resources/SvartJack/images/card_back.png");
     }
 
     public SvartJack(boolean image) {

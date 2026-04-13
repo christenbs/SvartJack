@@ -21,7 +21,7 @@ public class SvartJackController {
     private SvartJack svartJack = new SvartJack();
 
     private final CSVManager CSVManager = new CSVManager(
-        Paths.get("/Users/christenstaib/Desktop/Objektprosjekt/src/main/java/SvartJack/data.csv")
+        Paths.get("src/main/java/SvartJack/data.csv")
     );
 
     /*Felter som kan manipuleres */

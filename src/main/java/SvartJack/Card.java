@@ -7,7 +7,7 @@ import javafx.scene.image.Image;
 
 public class Card {
 
-    private final String PATH = "/Users/christenstaib/Desktop/Objektprosjekt/src/main/resources/SvartJack/images/playing_cards/";
+    private final String PATH = "src/main/resources/SvartJack/images/playing_cards/";
     private final ArrayList<Character> SUITS = new ArrayList<>(Arrays.asList('C', 'H', 'S', 'D'));
     
     private char suit;
